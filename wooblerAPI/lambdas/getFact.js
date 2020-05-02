@@ -4,7 +4,7 @@ exports.handler = async event => {
     console.log('event: ', event);
 
     if (!event.pathParameters || !event.pathParameters.ID){
-        return Responses._400({message: 'The path is missing the ID.'});
+        return Responses._400({message: 'The path is missing an ID.'});
     }
 
     let ID = event.pathParameters.ID;
