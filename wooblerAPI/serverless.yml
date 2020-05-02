@@ -1,0 +1,29 @@
+service: wooblerapi
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: woobler
+
+functions:
+  getFact:
+    handler: lambdas/getFact.handler
+    events:
+      - http:
+          path: get-fact/{ID}
+          method: GET
+          cors: true
+
+plugins:
+  - serverless-s3-sync
+
+custom:
+  s3Sync:
+    - bucketName: woobler-api-bucket
+      localDir: UploadData
+
+resources:
+  Resources:
+    WooblerApiBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: woobler-api-bucket
