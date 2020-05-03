@@ -1,4 +1,4 @@
-import { handler } from './getFactHandler';
+import { handler } from '../endpoints/getFactHandler';
 
 describe('getFactHandler.js: ', ()=>{
     describe('When passed a valid http request, ', () => {
@@ -7,7 +7,6 @@ describe('getFactHandler.js: ', ()=>{
                 'pathParameters': { 'ID': '1'}
             };
             const response = await handler(httpRequest);
-            console.log(response);
             expect(response.statusCode).toBe(200);
         });
     });
@@ -17,7 +16,6 @@ describe('getFactHandler.js: ', ()=>{
                 'pathParameters': { 'ID': 'Chuck Norris'}
             };
             const response = await handler(httpRequest);
-            console.log(response);
             expect(response.statusCode).toBe(400);
         });
     });

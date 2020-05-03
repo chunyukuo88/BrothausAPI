@@ -3,13 +3,28 @@ provider:
   name: aws
   runtime: nodejs12.x
   profile: woobler
+  region: us-east-1
+  environment:
+    tableName: ${self:custom.tableName}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: '*'
 
 functions:
   getFact:
-    handler: lambdas/getFactHandler.handler
+    handler: lambdas/endpoints/getFactHandler.handler
     events:
       - http:
           path: get-fact/{ID}
+          method: GET
+          cors: true
+  getDbFact:
+    handler: lambdas/endpoints/getDbFact.handler
+    events:
+      - http:
+          path: get-db-fact/{ID}
           method: GET
           cors: true
 
