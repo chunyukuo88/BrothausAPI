@@ -6,7 +6,7 @@ provider:
 
 functions:
   getFact:
-    handler: lambdas/getFact/getFactHandler.handler
+    handler: lambdas/getFactHandler.handler
     events:
       - http:
           path: get-fact/{ID}
