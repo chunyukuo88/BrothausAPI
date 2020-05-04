@@ -6,24 +6,22 @@ const TableName = process.env.tableName; //Pulling the table name from our serve
 
 exports.handler = async httpRequest => {
     
-    const category = JSON.parse(httpRequest.category);
-    const factData = JSON.parse(httpRequest.fact);
-    const id = uuidv4();
-
-    let fact = {};
+    if (!httpRequest.pathParameters || !httpRequest.pathParameters.ID){
+        return Responses._400({message: 'The path is missing an ID.'});
+    }
+    const id = httpRequest.pathParameters.ID;
+    const fact = JSON.parse(httpRequest.body);
     fact.ID = id;
-    fact.category = category;
-    fact.data = factData;
-
+    
     const newFact = await Dynamo.write(fact, TableName)
                                 .catch(error => {
-                                    console.log(error);
+                                    console.log(`Error in DynamoDB write: ${error}`);
                                     return null;
                                 });
-    
     if (!newFact) {
-        return Responses._400({ message: 'Failed to add new fact.' });
+        return Responses._400({ message: 'Failed to get fact by ID.' });
     } else {
-        return Responses._200({ newFact });
-    }
+        return Responses._200( { newFact });
+    };
+
 }

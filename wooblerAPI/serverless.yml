@@ -31,7 +31,7 @@ functions:
     handler: lambdas/endpoints/addDbFact.handler
     events:
       - http:
-          path: add-db-fact/category/{category}/fact/{fact}
+          path: add-db-fact/{ID}
           method: POST
           cors: true
 
