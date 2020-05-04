@@ -27,6 +27,13 @@ functions:
           path: get-db-fact/{ID}
           method: GET
           cors: true
+  addDbFact:
+    handler: lambdas/endpoints/addDbFact.handler
+    events:
+      - http:
+          path: add-db-fact/category/{category}/fact/{fact}
+          method: POST
+          cors: true
 
 plugins:
   - serverless-s3-sync
