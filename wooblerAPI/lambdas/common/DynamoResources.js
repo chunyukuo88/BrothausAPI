@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk';
 
 const documentClient = new AWS.DynamoDB.DocumentClient();
-const Dynamo = {
+const DynamoResources = {
 
     async get (ID, TableName) {
         const parameters = {
@@ -30,4 +30,4 @@ const Dynamo = {
     }
 };
 
-export default Dynamo;
+export default DynamoResources;
