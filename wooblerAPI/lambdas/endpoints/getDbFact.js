@@ -14,7 +14,7 @@ exports.handler = async httpRequest => {
                              .catch(error => {
                                  console.log(`An error occurred while retrieving fact from database: ${error}`);
                                  return null;
-                            })
+                            });
     return (!fact) ? Responses._400({message: 'Failed to retrieve fact.'}) :
                      Responses._200({fact});
-}
+};
