@@ -2,10 +2,12 @@ import AWS from 'aws-sdk';
 
 const documentClient = new AWS.DynamoDB.DocumentClient();
 
-async function get(ID, TableName) {
+async function retrieveFact(ID, TableName) {
     const parameters = {
         TableName,
-        Item: data
+        Key: {
+            ID
+        }
     };
     const data = await documentClient.get(parameters).promise();
     if (!data || !data.Item)
@@ -13,7 +15,7 @@ async function get(ID, TableName) {
     return data;
 };
 
-async function write(data, TableName){
+async function addFact(data, TableName){
     if (!data.ID)
         throw Error('There is no ID in the data.');
     
@@ -29,4 +31,4 @@ async function write(data, TableName){
 };
 
 
-module.exports = { get, write };
+module.exports = { retrieveFact, addFact };

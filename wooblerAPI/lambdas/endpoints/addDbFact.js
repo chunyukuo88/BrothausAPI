@@ -1,5 +1,5 @@
 import Responses from '../API_Responses';
-import Dynamo from '../common/DynamoResources';
+import * as dynamo from '../common/DynamoResources';
 
 const tableName = process.env.tableName; //Pulling the table name from our serverless.yml file!
 
@@ -13,7 +13,7 @@ exports.handler = async httpRequest => {
     const fact = JSON.parse(httpRequest.body);
     fact.ID = ID;
 
-    const newFact = await Dynamo.write(fact, tableName)
+    const newFact = await dynamo.write(fact, tableName)
                                 .catch(error => {
                                     console.log(`Error in DynamoDB write: ${error}`);
                                     return null;
