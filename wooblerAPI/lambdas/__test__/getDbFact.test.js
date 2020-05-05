@@ -1,14 +1,16 @@
 import { handler } from '../endpoints/getDbFact';
-import * as dynamo from '../common/DynamoResources';
+import Dynamo from '../common/DynamoResources';
+import Responses from '../API_Responses';
 
 const mockResponseWithFact = {
-    "newFact": {
+    "retrievedFact": {
         "category": "Serverless",
         "fact": "Serverless Offline is tricky.",
         "ID": "1"
     }
 };
 jest.mock('../common/DynamoResources');
+const mockDb = Dynamo.get = jest.fn() 
 const myTable = process.env.tableName; //Pulling the table name from our serverless.yml file!
 
 describe('getDbFact.js: ', ()=>{
@@ -23,12 +25,13 @@ describe('getDbFact.js: ', ()=>{
         };
         test('the handler invokes the retrieveFact() method of DynamoResources.js.', ()=>{
             handler(httpRequest);
-            expect(dynamo.retrieveFact).toHaveBeenCalledTimes(1);
+            expect(Dynamo.get).toHaveBeenCalledTimes(1);
         });
         test('the handler returns the corresponding fact.', async ()=>{
-            dynamo.retrieveFact = jest.fn(()=> mockResponseWithFact);
+            // Dynamo.get = jest.fn(()=> mockResponseWithFact);
+            mockDb.mockReturnValue(mockResponseWithFact)
             const result = await handler(httpRequest);
-            expect(result).toBe(mockResponseWithFact);
+            expect(result).toEqual(Responses._200(mockResponseWithFact));
         });
     });
 });
