@@ -7,8 +7,9 @@ exports.handler = async httpRequest => {
     const params = httpRequest.pathParameters;
     if (   !params 
         || !params.ID
+        || parseInt(params.ID) * 0 !== 0
         ){
-        return Responses._400({message: 'The path is missing an ID.'});
+        return Responses._400({message: 'The path is missing a valid ID.'});
     }
     const id = httpRequest.pathParameters.ID;
 
