@@ -45,18 +45,18 @@ describe('getDbFact.js: ', ()=>{
                 expect(result.statusCode).toBe(400);
             });
         });
-        // describe('such as an ID that does not yet exist in DynamoDB, ', ()=>{
-        //     test('return a 400 error code.', async ()=>{
-        //         mockDb.mockReturnValue(mockErrorResponse);
-        //         const invalidRequest = {
-        //             pathParameters: {
-        //                 ID: 8000
-        //             }
-        //         };
-        //         const result = await handler(invalidRequest);
-        //         console.log(result);
-        //         expect(result).toEqual(Responses._400(mockErrorResponse));
-        //     });
-        // });
+        describe('such as an ID that does not yet exist in DynamoDB, ', ()=>{
+            test('returns "Failed to retrieve fact" message.', async ()=>{
+                mockDb.mockReturnValue(mockErrorResponse);
+                const invalidRequest = {
+                    pathParameters: {
+                        ID: 8000
+                    }
+                };
+                const result = await handler(invalidRequest);
+                console.log(result);
+                expect(result.body).toEqual(Responses._400(mockErrorResponse).body);
+            });
+        });
     });
 });
