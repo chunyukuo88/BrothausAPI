@@ -1,5 +1,5 @@
 import Responses from '../API_Responses';
-import Dynamo from '../common/DynamoResources';
+import Dynamo from '../common/dynamoResources';
 
 const tableName = process.env.tableName; //Pulling the table name from our serverless.yml file!
 
@@ -14,9 +14,6 @@ exports.handler = async httpRequest => {
 
     const fact = await Dynamo.get(id, tableName);
           
-    console.log(`Server response: ${fact}`);
-    return (!fact
-            || fact === undefined
-            ) ? Responses._400({message: 'Failed to retrieve fact.'}) :
+    return (!fact) ? Responses._400({message: 'Failed to retrieve fact.'}) :
                 Responses._200(fact);
 }

@@ -1,5 +1,5 @@
 import Responses from '../API_Responses';
-import * as dynamo from '../common/DynamoResources';
+import * as dynamo from '../common/dynamoResources';
 
 const tableName = process.env.tableName; //Pulling the table name from our serverless.yml file!
 

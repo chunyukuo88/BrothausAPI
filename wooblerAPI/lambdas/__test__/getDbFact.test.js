@@ -1,5 +1,5 @@
 import { handler } from '../endpoints/getDbFact';
-import Dynamo from '../common/DynamoResources';
+import Dynamo from '../common/dynamoResources';
 import Responses from '../API_Responses';
 
 const mockResponseWithFact = {
@@ -28,15 +28,15 @@ describe('getDbFact.js: ', ()=>{
             handler(httpRequest);
             expect(Dynamo.get).toHaveBeenCalledTimes(1);
         });
-        test('the handler returns the corresponding fact.', async ()=>{
-            mockDb.mockReturnValue(mockResponseWithFact)
+        test('the handler gets a response with the corresponding fact from Dynamo.js.', async ()=>{
+            mockDb.mockReturnValue(mockResponseWithFact);
             const result = await handler(httpRequest);
             expect(result).toEqual(Responses._200(mockResponseWithFact));
         });
     });
     describe('When given an invalid http request, ', ()=>{
         describe('such as a missing or non-integer ID, ', ()=>{
-            test('return a 400 error code.', async ()=>{
+            test('it returns a 400 error code.', async ()=>{
                 mockDb.mockReturnValue(mockErrorResponse);
                 const invalidRequest = {
                     pathParameters: {ID: 'rubbish'}
@@ -46,7 +46,7 @@ describe('getDbFact.js: ', ()=>{
             });
         });
         describe('such as an ID that does not yet exist in DynamoDB, ', ()=>{
-            test('returns "Failed to retrieve fact" message.', async ()=>{
+            test('it returns "Failed to retrieve fact" message.', async ()=>{
                 mockDb.mockReturnValue(mockErrorResponse);
                 const invalidRequest = {
                     pathParameters: {
@@ -54,9 +54,9 @@ describe('getDbFact.js: ', ()=>{
                     }
                 };
                 const result = await handler(invalidRequest);
-                console.log(result);
                 expect(result.body).toEqual(Responses._400(mockErrorResponse).body);
             });
+            // TODO: Test such that the last test also returns a 400 error code.
         });
     });
 });
