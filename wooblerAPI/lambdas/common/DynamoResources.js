@@ -1,28 +1,23 @@
 import AWS from 'aws-sdk';
 
-const documentClient =  new AWS.DynamoDB.DocumentClient();
+const documentClient = new AWS.DynamoDB.DocumentClient();
 
-const Dynamo = {
-    async get (ID, TableName) {
-        const params = {
+export const Dynamo = {
+        
+    async retrieveFact(ID, TableName) {
+        const parameters = {
             TableName,
             Key: {
                 ID
             }
         };
-
-        const data = await documentClient
-                            .get(params)
-                            .promise();
-        
-        if (!data || !data.Item){
+        const data = await documentClient.get(parameters).promise();
+        if (!data || !data.Item)
             throw Error(`Unable to fetch data with ID ${ID} from ${TableName}`);
-        } else {
-            return data;
-        }
+        return data;
     },
 
-    async write (data, TableName){
+    async addFact(data, TableName){
         if (!data.ID)
             throw Error('There is no ID in the data.');
         
@@ -35,20 +30,5 @@ const Dynamo = {
         if (!response)
             throw Error(`There was an error inserting an ${data.ID} into table ${TableName}.`);
         return data;
-    },
-
-    update: async ({ tableName, primaryKey, primaryKeyValue, updateKey, updateValue }) => {
-        const params = {
-            TableName: tableName,
-            Key: { 
-                [primaryKey]: primaryKeyValue
-            },
-            UpdateExpression: `set ${updateKey} = :updateValue`,
-            ExpressionAttributeValues: {
-                ':updateValue': updateValue
-            }
-        };
     }
-};
-
-export default Dynamo;
+}

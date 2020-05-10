@@ -6,9 +6,11 @@ provider:
   region: us-east-1
   environment:
     tableName: ${self:custom.tableName}
+    bucketName: ${self:custom.bucketName}
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - s3:*
         - dynamodb:*
       Resource: '*'
 
@@ -34,12 +36,12 @@ functions:
           path: add-db-fact/{ID}
           method: POST
           cors: true
-  updateDbFact:
-    handler: lambdas/endpoints/updateDbFact.handler
+  createFile:
+    handler: lambdas/endpoints/createFile.handler
     events:
       - http:
-          path: update-db-fact/{ID}
-          method: PUT
+          path: create-file/{fileName}
+          method: POST
           cors: true
 
 plugins:
@@ -51,8 +53,9 @@ package:
 
 custom:
   tableName: science-facts
+  bucketName: woobler-api-bucket
   s3Sync:
-    - bucketName: woobler-api-bucket
+    - bucketName: ${self:custom.bucketName}
       localDir: UploadData
 
 resources:
@@ -60,7 +63,7 @@ resources:
     WooblerApiBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: woobler-api-bucket
+        BucketName: ${self:custom.bucketName}
     MyDynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
