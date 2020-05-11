@@ -1,24 +1,41 @@
-import AWS from 'aws-sdk';
+// import AWS from 'aws-sdk';
+const AWS = require('aws-sdk');
 
-const S3Client = new AWS.S3();
+const s3Client = new AWS.S3();
 
-export const S3 = {
+const S3 = {
+    async get(fileName, bucket) {
+        const params = {
+            Bucket: bucket,
+            Key: fileName,
+        };
 
-    async getFromS3(){},
+        let data = await s3Client.getObject(params).promise();
 
-    async writeToS3(data, fileName, bucket){
+        if (!data) {
+            throw Error(`Failed to get file ${fileName}, from ${bucket}`);
+        }
+
+        if (fileName.slice(fileName.length - 4, fileName.length) == 'json') {
+            data = data.Body.toString();
+        }
+        return data;
+    },
+    async write(data, fileName, bucket) {
         const params = {
             Bucket: bucket,
             Body: JSON.stringify(data),
             Key: fileName,
         };
 
-        const newData = await S3Client.putObject(params).promise();
+        const newData = await s3Client.putObject(params).promise();
 
-        if (!newData){
-            throw Error('There was no new data to write to S3.');
+        if (!newData) {
+            throw Error('there was an error writing the file');
         }
 
         return newData;
-    }
-}
+    },
+};
+
+module.exports = S3;

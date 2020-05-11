@@ -1,4 +1,4 @@
-import Responses from '../API_Responses';
+import Responses from '../common/API_Responses';
 import data from '../Facts';
 
 exports.handler = async httpRequest => {

@@ -12,16 +12,15 @@ exports.handler = async event => {
     }
 
     let fileName = event.pathParameters.fileName;
-    const data = JSON.parse(event.body);
 
-    const newData = await S3.write(data, fileName, bucket).catch(err => {
-        console.log('error in S3 write', err);
+    const file = await S3.get(fileName, bucket).catch(err => {
+        console.log('error in S3 get', err);
         return null;
     });
 
-    if (!newData) {
-        return Responses._400({ message: 'Failed to write data by filename' });
+    if (!file) {
+        return Responses._400({ message: 'Failed to read data by filename' });
     }
 
-    return Responses._200({ newData });
+    return Responses._200({ file });
 };
