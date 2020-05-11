@@ -9,12 +9,13 @@ exports.handler = async httpRequest => {
     }
 
     let fileName = httpRequest.pathParameters.fileName;
+    const data = JSON.parse(httpRequest.body);
 
-    const retrievedFile = await S3.get(fileName, bucket).catch(err => {
-        console.log('error in S3 get', err);
+    const newData = await S3.write(data, fileName, bucket).catch(err => {
+        console.log('error in S3 write', err);
         return null;
     });
 
-    return (!retrievedFile) ? Responses._400({ message: 'Failed to read data by filename' }) :
-                              Responses._200({ retrievedFile });
+    return (!newData) ? Responses._400({ message: 'Failed to write data by filename' }) :
+                        Responses._200({ newData });
 };

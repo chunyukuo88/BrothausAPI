@@ -37,7 +37,7 @@ functions:
           method: POST
           cors: true
   createFile:
-    handler: lambdas/endpoints/createFile.handler
+    handler: lambdas/endpoints/createS3File.handler
     events:
       - http:
           path: create-file/{fileName}
