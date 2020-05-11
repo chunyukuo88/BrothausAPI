@@ -13,6 +13,26 @@ provider:
         - s3:*
         - dynamodb:*
       Resource: '*'
+  apiKeys:
+    - free:
+      - myFreeApiKey
+    - paid:
+      - myPaidApiKey
+  usagePlan:
+    - free:
+      quota:
+        limit: 88
+        period: MONTH
+      throttle:
+        rateLimit: 5
+        burstLimit: 20
+    - paid:
+      quota:
+        limit: 888
+        period: MONTH
+      throttle:
+        rateLimit: 10
+        burstLimit: 200
 
 functions:
   getFact:
@@ -36,6 +56,7 @@ functions:
           path: add-db-fact/{ID}
           method: POST
           cors: true
+          private: true
   createFile:
     handler: lambdas/endpoints/createS3File.handler
     events:
@@ -43,6 +64,7 @@ functions:
           path: create-s3-file/{fileName}
           method: POST
           cors: true
+          private: true
   getS3File:
     handler: lambdas/endpoints/getS3File.handler
     events:
@@ -54,6 +76,7 @@ functions:
 plugins:
   - serverless-s3-sync
   - serverless-webpack
+  - serverless-offline
 
 package:
   individually: true
